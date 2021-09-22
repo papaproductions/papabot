@@ -1801,7 +1801,8 @@ async function alRecibirMensaje (message) {
 					message.reply(new Discord.MessageEmbed({
 						title: "<:papabot_error:816027785796649051> No... wtf",
 						description: (permisos[comando].soloOwners ? `- Solo los desarrolladores puede usar este comando.\n` : "")
-								+ (permisos[comando].soloMods ? "- Solo moderadores pueden usar este comando.\n" : "")								+ (permisos[comando].permisos > 0 ? `- Necesitas los siguientes permisos:\n${convertirPermisos(permisos[comando].permisos).join(", ")}\n` : "")
+								+ (permisos[comando].soloMods ? "- Solo moderadores pueden usar este comando.\n" : "")
+								+ (permisos[comando].permisos > 0 ? `- Necesitas los siguientes permisos:\n${convertirPermisos(permisos[comando].permisos).join(", ")}\n` : "")
 								+ (permisos[comando].soloOwnerGuild ? `- Este comando sólo puede ser ejecutado por el owner del servidor, ${message.guild.owner.user.tag}` : ""),
 						color: "#f04947"
 					}));
