@@ -1,0 +1,122 @@
+flag <país>
+Muestra el emoji de la bandera de un país.
+
+coin
+Tira una moneda
+
+gtts <texto>
+Dice algo usando el motor de voz de google.
+
+hangman
+Juega a ahorcado!
+
+stophangman
+Termina tu juego actual de ahorcado.
+
+letter <letra>
+Adivina una __letra__ en ahorcado.
+
+say <texto>
+Dice algo.
+
+help [página]
+Muestra.... esto.
+
+info
+Muestra información acerca del bot.
+
+ping
+pong.
+
+invite
+Invita a PapaBot a tu servidor.
+
+warn <usuario> [razón]
+Advierte a un usuario.
+
+digest <algoritmo> <texto>
+Digiere texto.
+
+mute <usuario> [tiempo] [razón]
+Mutea a un usuario de manera que ya no puede escribir.
+
+kick <usuario> [razón]
+Expulsa a un usuario del servidor.
+
+ban <usuario> [tiempo] [razón]
+Banea a un usuario del servidor.
+
+unmute <usuario> [razón]
+Desmutea a un usuario.
+
+unban <usuario> [razón]
+Desbanea a un usuario.
+
+softban <usuario> [razón]
+Expulsa a un usuario y elimina en masa el equivalente a un día de mensajes de este mismo.
+
+slowmode <tiempo> [razón]
+Cambia el modo pausado del canal actual.
+
+setlogchannel <canal>
+Establece un canal de registros.
+
+history <usuario>
+Muestra el historial de sanciones de un usuario.
+
+addmod <rol>
+Da permisos de moderador a un rol.
+
+removemod <rol>
+Remueve los permisos de moderador a un rol.
+
+lockchannel [canal]
+Pone un canal en cierre evitando que la gente pueda hablar en este.
+
+unlockchannel [canal]
+Abre un canal de nuevo.
+
+delallwarnings <usuario>
+Limpia todas las sanciones de un usuario.
+
+prefix <nuevo prefijo>
+Cambia el prefijo del bot. El predeterminado es `$` y en la versión premium `pb!`.
+
+delwarn <id de sanción>
+Elimina una sanción de un usuario.
+
+editwarningreason <id de sanción> <nueva razón>
+Edita la razón de una sanción.
+
+showpunishmentembed <yes o no>
+Cambia si deseas mostrar un embed con info. en los comandos de sanción.
+
+lockserver
+Pone en cierre el servidor, evitando que la gente hable en todos los canales.
+
+unlockserver
+Abre el servidor de nuevo.
+
+mutedrole <rol>
+Actualiza el rol muteado establecido para este servidor.
+
+format <texto>
+Elimina el formato en un texto.
+
+rangepunishmentrestriction <yes o no>
+Establece si importa la jerarquía de roles en comandos de sanción.
+
+purge <cantidad>
+Elimina en masa mensajes en un canal. Máximo 100.
+
+embed <JSON>
+Envía un embed.
+
+nick <usuario> [apodo]
+Actualiza el apodo de un usuario.
+
+rockpaperscissors <rock, paper o scissors>
+Piedra, papel o tijera!
+
+reactionroles
+Configura roles de reacción en un canal.
