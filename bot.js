@@ -125,8 +125,7 @@ async function configurarGuild(guild) {
 		try {
 			c = JSON.parse(fs.readFileSync(`config/${guild.id}`).toString())
 		}catch { c = {}}
-	const canales = guild.channels.cache.array();
-	if(process.argv[2] !== "--premium" || c.premium) {
+		const canales = guild.channels.cache.array();
 		var rolMuteado;
 		try {
 			/*rolMuteado = await guild.roles.create({
@@ -154,7 +153,7 @@ async function configurarGuild(guild) {
 					},
 					prevencionRangos: true,
 					mods: [],
-					prefijo: process.argv[2] == "--premium" ? "pb!" : "$"
+					prefijo: "$"
 				};
 			}
 			//guild.channels.cache.forEach(canal => configurarRolMuteado(canal).catch((err) => registrar("error", "Algo fallo al configurar un servidor :(")));
@@ -174,16 +173,6 @@ async function configurarGuild(guild) {
 			registrar("error", err.stack);
 		}
 		guardarConfig(guild);
-	}
-	else {
-		for(var canal of canales) {
-			if(canal.isText() && canal.viewable && canal.permissionsFor(cliente.user).has("SEND_MESSAGES")) {
-				await canal.send("Este guild no ha comprado premium, me wa ir de aquí.");
-				await guild.leave();
-				break;
-			}
-		}
-	}
 	}
 	catch {}
 }
@@ -218,10 +207,10 @@ async function listo() {
 		}
 	});
 
-	fs.readdirSync(`config${process.argv[2] == "--premium" ? "Premium" : ""}`).forEach((archivo) => {
+	fs.readdirSync("config").forEach((archivo) => {
 		try {
 			registrar("procesando", `Cargando configuración de ${archivo}...`);
-			config[archivo] = JSON.parse(fs.readFileSync(`config${process.argv[2] == "--premium" ? "Premium" : ""}/${archivo}`));
+			config[archivo] = JSON.parse(fs.readFileSync(`config/${archivo}`));
 			registrar("correcto", "Listo!");
 		}
 		catch(err) {
@@ -568,7 +557,7 @@ async function alRecibirMensaje (message) {
 	}
 	else {
 		veces[message.guild.id] = JSON.parse(fs.readFileSync(`warnings/${message.guild.id}`).toString());
-		config[message.guild.id] = JSON.parse(fs.readFileSync(`config${process.argv[2] == "--premium" ? "Premium": ""}/${message.guild.id}`).toString());
+		config[message.guild.id] = JSON.parse(fs.readFileSync(`config/${message.guild.id}`).toString());
 	}
 	
 	try {
@@ -889,12 +878,6 @@ async function alRecibirMensaje (message) {
 					soloOwners: false,
 					soloMods: false
 				},
-				"pruebapremium": {
-					permisos: 0,
-					soloOwners: false,
-					soloMods: false,
-					premium: true
-				},
 				"reloadwarnings": {
 					permisos: 32,
 					soloOwners: false,
@@ -968,7 +951,7 @@ async function alRecibirMensaje (message) {
 				}
 			};
 			if(permisos[comando]) {
-				if((message.member.hasPermission(permisos[comando].permisos) || (permisos[comando].soloMods && esUnMod)) && (!permisos[comando].soloOwners || cliente.guilds.cache.get("443568779205804044").members.cache.get(message.author.id).roles.cache.has("888858750771933265")) && (process.argv[2] == "--premium" || !permisos[comando].premium) && (!permisos[comando].soloOwnerGuild || message.member.id == message.guild.ownerID)) {
+				if((message.member.hasPermission(permisos[comando].permisos) || (permisos[comando].soloMods && esUnMod)) && (!permisos[comando].soloOwners || cliente.guilds.cache.get("443568779205804044").members.cache.get(message.author.id).roles.cache.has("888858750771933265")) && (!permisos[comando].soloOwnerGuild || message.member.id == message.guild.ownerID)) {
 					//registrar(`El comando ${config[message.guild.id].prefijo}${comando} con los argumentos ${argumentos.join(" ")}.`)
 					switch(comando) {
 						case "reloadwarnings":
@@ -1656,9 +1639,6 @@ async function alRecibirMensaje (message) {
 							config[message.guild.id].prevencionRangos = b;
 							guardarConfig(message.guild);
 						break;
-						case "pruebapremium" :
-							message.reply("Tenes premium xdn't");
-						break;
 						case "showpunishmentembed" :
 							var b;
 							switch(argumentos[0]) {
@@ -1821,9 +1801,7 @@ async function alRecibirMensaje (message) {
 					message.reply(new Discord.MessageEmbed({
 						title: "<:papabot_error:816027785796649051> No... wtf",
 						description: (permisos[comando].soloOwners ? `- Solo los desarrolladores puede usar este comando.\n` : "")
-								+ (permisos[comando].soloMods ? "- Solo moderadores pueden usar este comando.\n" : "")
-								+ (permisos[comando].premium ? "- Necesitas premium para usar este comando.\n" : "")
-								+ (permisos[comando].permisos > 0 ? `- Necesitas los siguientes permisos:\n${convertirPermisos(permisos[comando].permisos).join(", ")}\n` : "")
+								+ (permisos[comando].soloMods ? "- Solo moderadores pueden usar este comando.\n" : "")								+ (permisos[comando].permisos > 0 ? `- Necesitas los siguientes permisos:\n${convertirPermisos(permisos[comando].permisos).join(", ")}\n` : "")
 								+ (permisos[comando].soloOwnerGuild ? `- Este comando sólo puede ser ejecutado por el owner del servidor, ${message.guild.owner.user.tag}` : ""),
 						color: "#f04947"
 					}));
@@ -2179,7 +2157,7 @@ function actualizarWarnings(guild) {
 }
 
 function guardarConfig(guild) {
-	fs.writeFileSync(`config${process.argv[2] == "--premium" ? "Premium" : ""}/${guild.id}`, JSON.stringify(config[guild.id] == undefined ? [] : config[guild.id]));
+	fs.writeFileSync("config", JSON.stringify(config[guild.id] == undefined ? [] : config[guild.id]));
 }
 
 /**
@@ -2247,7 +2225,7 @@ function abreviar(numero) {
 }
 
 //Iniciar sesión con el token de la cuenta de PapaBot.
-cliente.login(fs.readFileSync(`token${process.argv[2] == "--premium" ? "Premium" : ""}.txt`).toString().trim());
+cliente.login(fs.readFileSync("token.txt").toString().trim());
 registrar("info", "-- PapaBot para Discord --\n"
 			  + "(C) 2020-2021 Papa productions\n\n"
 			  + "Colores");
