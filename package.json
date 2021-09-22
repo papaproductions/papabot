@@ -1,0 +1,24 @@
+{
+  "name": "papabot",
+  "version": "1.0.0",
+  "description": "PapaBot es un bot de moderación para Discord",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "papabot",
+    "moderacion"
+  ],
+  "author": "Papa productions#4330",
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/opus": "^0.3.3",
+    "discord.js": "^13.1.0",
+    "googleapis": "^68.0.0",
+    "gtts": "^0.1.1",
+    "uuid": "^3.4.0"
+  }
+}
