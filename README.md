@@ -11,4 +11,5 @@ Para hostearlo, primero:
 3. Instala discord.js (Solo funciona v12 por ahora), @discordjs/opus, gtts y uuid con npm
 4. Crea dos directorios: config y warnings
 5. Crea una aplicación en https://discord.com/developers, crea un bot y copia el token a un archivo llamado "token.txt"
-6. Haz `node .`
+8. Si deseas usar `$hangman`, crea un archivo hangman.txt y añade varias palabras separadas por line breaks.
+7. Haz `node .`
