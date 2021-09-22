@@ -12,6 +12,14 @@
     "papabot",
     "moderacion"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/papaproductions/papabot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/papaproductions/papabot/issues"
+  },
+  "homepage": "https://github.com/papaproductions/papabot#readme",
   "author": "Papa productions#4330",
   "license": "MIT",
   "dependencies": {
