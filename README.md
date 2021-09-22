@@ -2,7 +2,7 @@
 PapaBot es un bot para discord de moderación.
 
 # Sirve con discord.js v13?
-no.
+No por ahora, aunque quizás en el futuro.
 
 # Como lo hosteo?
 Para hostearlo, primero:
