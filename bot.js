@@ -2158,7 +2158,7 @@ function actualizarWarnings(guild) {
 }
 
 function guardarConfig(guild) {
-	fs.writeFileSync("config", JSON.stringify(config[guild.id] == undefined ? [] : config[guild.id]));
+	fs.writeFileSync(`config/${config.id}`, JSON.stringify(config[guild.id] == undefined ? [] : config[guild.id]));
 }
 
 /**
