@@ -286,7 +286,7 @@ cliente.on("guildMemberRemove", async (miembro) => {
 cliente.on("guildMemberAdd", async (miembro) => {
 	var webhookRegistros = await obtenerWebhookRegistros(miembro.guild);
 	if(webhookRegistros != undefined) {
-		webhookRegistros.send(new Discord.MessageEmbed({
+		await webhookRegistros.send(new Discord.MessageEmbed({
 			title: "Un nuevo miembro entró",
 			thumbnail: {
 				url: miembro.user.avatarURL()
@@ -304,6 +304,9 @@ cliente.on("guildMemberAdd", async (miembro) => {
 				},
 			]
 		}));
+	}
+	if(config[miembro.guild.id].modoEmergencia) {
+		await miembro.kick("Modo de emergencia habilitado.");
 	}
 });
 
@@ -593,7 +596,7 @@ async function alRecibirMensaje (message) {
 		if(!(message.author.bot || message.channel.nsfw || message.member.permissions.has("ADMINISTRATOR"))) {
 			//registrar("procesando", "Detectado spam...");
 			//Detector de spam.
-			if(config[message.guild.id].autoMod.repeticionMensajes) {
+			if(config[message.guild.id].autoMod.repeticionMensajes || config[message.guild.id].modoEmergencia) {
 				if(miembroSpam != undefined && mensajeFinal == objetivoSpam && message.author.id == miembroSpam.id && message.guild == miembroSpam.guild) {
 					if(vecesSpam[message.author.id] == undefined) {
 						vecesSpam[message.author.id] = 1;
@@ -614,6 +617,9 @@ async function alRecibirMensaje (message) {
 					await sancionar("warn", message.author.id, "AutoMod: Mensaje repetido", message, "", cliente.user.id, false, true);
 					message.reply("No repitas mensajes!");
 					revisarFaltas(message.member, message);
+					if(config[message.guild.id].modoEmergencia) {
+						cerrarCanal(message.channel.id, await message.channel.send("Modo de emergencia activado, cerrando canal..."));
+					}
 					//registrar("procesando", "Muteando...");
 				}
 				objetivoSpam = mensajeFinal;
@@ -642,7 +648,7 @@ async function alRecibirMensaje (message) {
 						//registrar("correcto", "¡¡¡MALA PALABRA DETECTADA!!!");
 						//registrar("procesando", "Registrando...");
 						//registrar("procesando", "Advirtiendo...");
-						message.reply("No digas malas palabras!");
+						message.reply("No digas eso!");
 						await sancionar("warn", message.author.id, "AutoMod: Mensaje inapropiado", message, "", cliente.user.id, false, true);
 						revisarFaltas(message.member, message);
 						//registrar("procesando", "Eliminando mensaje...");
@@ -693,6 +699,12 @@ async function alRecibirMensaje (message) {
 			}
 			if(alias[comando]) comando = alias[comando];
 			var permisos = {
+				"emergencymode": {
+					permisos: 0,
+					soloMods: false,
+					soloOwners: false,
+					soloOwnerGuild: true
+				},
 				"flag": {
 					permisos: 0,
 					soloMods: false,
@@ -1733,6 +1745,41 @@ async function alRecibirMensaje (message) {
 								}
 							});
 						break;
+						case "emergencymode" :
+							if(config[message.guild.id].modoEmergencia) {
+								await message.channel.send("Deshabilitando modo de emergencia...");
+								config[message.guild.id].modoEmergencia = false;
+								guardarConfig(message.guild);
+								await message.channel.send("Modo de emergencia ha sido deshabilitado.");
+							}
+							let mensajeEmergencia = await message.channel.send(new Discord.MessageEmbed({
+								title: "Modo de emergencia",
+								description: `Estás a punto de poner tu servidor en modo de emergencia. Esto signfica que:
+- El mínimo spam causará que el canal se cierre, y se mutee indefinidamente a la persona.
+- No se permitirá que alguien entre al servidor.
+- Para regresar a la normalidad, ejecuta este comando de nuevo.
+
+Estás seguro de esto?`
+							}));
+							await mensajeEmergencia.react("✅");
+							await mensajeEmergencia.react("❌");
+							cliente.on("messageReactionAdd", handlerEmergencia);
+							function handlerEmergencia(r, u) {
+								if(mensajeEmergencia.id !== r.message.id) return;
+								if(u.id !== r.message.guild.ownerID) {
+									try {
+										u.send("quien te pregunto");
+									} catch(err) {}
+									return;
+								}
+								if(r.emoji.name === "✅") {
+									mensajeEmergencia.channel.send("Entrando en modo de emergencia...");
+									config[message.guild.id].modoEmergencia = true;
+									guardarConfig(mensajeEmergencia.guild);
+									cliente.off("messageReactionAdd", handlerEmergencia);
+								}
+							}
+						break;
 						case "editwarningreason" :
 							var embed = new Discord.MessageEmbed();
 							var warn = veces[message.guild.id].find(w => w.id == argumentos[0]);
@@ -2158,7 +2205,7 @@ function actualizarWarnings(guild) {
 }
 
 function guardarConfig(guild) {
-	fs.writeFileSync(`config/${config.id}`, JSON.stringify(config[guild.id] == undefined ? [] : config[guild.id]));
+	fs.writeFileSync(`config/${guild.id}`, JSON.stringify(config[guild.id] == undefined ? [] : config[guild.id]));
 }
 
 /**
