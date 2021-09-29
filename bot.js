@@ -618,7 +618,9 @@ async function alRecibirMensaje (message) {
 					message.reply("No repitas mensajes!");
 					revisarFaltas(message.member, message);
 					if(config[message.guild.id].modoEmergencia) {
-						cerrarCanal(message.channel.id, await message.channel.send("Modo de emergencia activado, cerrando canal..."));
+						let mensajeExtra = await message.channel.send("Modo de emergencia activado, cerrando canal...");
+						cerrarCanal(message.channel.id, mensajeExtra);
+						sancionar("mute", message.author.id, "Spam durante modo de emergencia", mensajeExtra, "", cliente.user.id, false, true);
 					}
 					//registrar("procesando", "Muteando...");
 				}
