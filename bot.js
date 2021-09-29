@@ -1751,6 +1751,7 @@ async function alRecibirMensaje (message) {
 								config[message.guild.id].modoEmergencia = false;
 								guardarConfig(message.guild);
 								await message.channel.send("Modo de emergencia ha sido deshabilitado.");
+								return;
 							}
 							let mensajeEmergencia = await message.channel.send(new Discord.MessageEmbed({
 								title: "Modo de emergencia",
@@ -1776,8 +1777,11 @@ Estás seguro de esto?`
 									mensajeEmergencia.channel.send("Entrando en modo de emergencia...");
 									config[message.guild.id].modoEmergencia = true;
 									guardarConfig(mensajeEmergencia.guild);
-									cliente.off("messageReactionAdd", handlerEmergencia);
 								}
+								else {
+									mensajeEmergencia.channel.send("Cancelado.")
+								}
+								cliente.off("messageReactionAdd", handlerEmergencia);
 							}
 						break;
 						case "editwarningreason" :
