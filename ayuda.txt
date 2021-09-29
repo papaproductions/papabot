@@ -80,7 +80,7 @@ delallwarnings <usuario>
 Limpia todas las sanciones de un usuario.
 
 prefix <nuevo prefijo>
-Cambia el prefijo del bot. El predeterminado es `$` y en la versión premium `pb!`.
+Cambia el prefijo del bot. El predeterminado es `$`.
 
 delwarn <id de sanción>
 Elimina una sanción de un usuario.
