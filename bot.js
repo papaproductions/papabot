@@ -1232,7 +1232,7 @@ async function alRecibirMensaje (message) {
 							var embed = new Discord.MessageEmbed();
 							embed.setTitle("Comandos de PapaBot:");
 							embed.setDescription("Lista de comandos de PapaBot. Muchos de estos comandos están basados en los comandos de Dyno.");
-							var ayuda = fs.readFileSync("ayuda.txt").toString().split("\n\n");
+							var ayuda = fs.readFileSync("ayuda.txt").toString().split("\r\n\r\n");
 							ayuda.splice(0, (argumentos[0] - 1) * 25);
 							if(ayuda.length === 0) {
 								message.channel.send(`Desde mi conocimiento no hay una tal "Página ${argumentos[0]}".`);
