@@ -1225,7 +1225,11 @@ async function alRecibirMensaje (message) {
 							}
 						break;
 						case "say" :
-							await message.channel.send(argumentos.join(" "));
+							await message.channel.send(argumentos.join(" "), {
+								allowedMentions: {
+									roles: []
+								}
+							});
 							await message.delete();
 						break;
 						case "help" :
