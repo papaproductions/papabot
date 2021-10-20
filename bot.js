@@ -1099,16 +1099,7 @@ async function alRecibirMensaje (message) {
 						break;
 						case "userinfo":
 							var usuario = cliente.users.cache.get(id);
-							var nitros = ["No tiene Nitro", "Nitro Classic", "Nitro"];
-							var flags = ["Empleado de Discord", "Dueño de servidor socio", "Eventos de HypeSquad", "Bug Hunter Nivel 1", "", "", "Bravery de HypeSquad", "Brilliance de HypeSquad", "Balance de HypeSquad", "Usuario del Equipo", "", "Sistema", "", "Bug Hunter Nivel 2", "", "Bot Verificado", "Desarrollador"];
-							var flagsUsuario = [];
-							var flagsString = flagsUsuario.map(f => `- ${f}`).join("\n");
-							flags.forEach((flag, i) => {
-								var flagInt = 1 << i;
-								if((usuario.flags.bitfield & flagInt) == flagInt) {
-									flagsUsuario.push(flags[i]);
-								}
-							});
+							let miembro = message.guild.members.cache.get(usuario.id);
 							message.reply(new Discord.MessageEmbed({
 								author: {
 									name: `Info de ${usuario.tag}`,
@@ -1120,12 +1111,12 @@ async function alRecibirMensaje (message) {
 										value: usuario.createdAt
 									},
 									{
-										name: "Insignias",
-										value: flagsString.length == 0 ? "Ninguna F" : flagsString
-									},
-									{
 										name: "Tipo de usuario",
 										value: usuario.bot ? "Bot" : "Usuario normal"
+									},
+									{
+										name: "Roles",
+										value: miembro ? miembro.roles.cache.map(r => r.toString()).join(" ") : `Este usuario no es miembro de **${message.guild.name}**.` 
 									}
 								]
 							}));
