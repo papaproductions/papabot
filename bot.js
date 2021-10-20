@@ -1100,6 +1100,7 @@ async function alRecibirMensaje (message) {
 						case "userinfo":
 							var usuario = cliente.users.cache.get(id);
 							let memb = message.guild.members.cache.get(usuario.id);
+							let rolesString = (memb ? memb.roles.cache.map(r => r.toString()).join(" ") : `Este usuario no es miembro de **${message.guild.name}**.`);
 							message.reply(new Discord.MessageEmbed({
 								author: {
 									name: `Info de ${usuario.tag}`,
@@ -1116,7 +1117,7 @@ async function alRecibirMensaje (message) {
 									},
 									{
 										name: "Roles",
-										value: memb ? memb.roles.cache.map(r => r.toString()).join(" ") : `Este usuario no es miembro de **${message.guild.name}**.` 
+										value: rolesString.length > 1024 ? "Muy grande" : rolesString
 									}
 								]
 							}));
