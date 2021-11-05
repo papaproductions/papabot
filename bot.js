@@ -1079,7 +1079,7 @@ async function alRecibirMensaje (message) {
 							}));
 						break;
 						case "reboot" :
-							message.channel.send("Enviando señal de reinicio a process manager...");
+							await message.channel.send("Enviando señal de reinicio a process manager...");
 							process.send("reiniciar");
 							process.exit(0);
 						break;
