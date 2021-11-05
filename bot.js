@@ -842,6 +842,11 @@ async function alRecibirMensaje (message) {
 					soloMods: true,
 					soloOwners: false
 				},
+				"reboot": {
+					permisos: 0,
+					soloMods: false,
+					soloOwners: true
+				},
 				"bam": {
 					permisos: 0,
 					soloMods: false,
@@ -1072,6 +1077,11 @@ async function alRecibirMensaje (message) {
 									}
 								]
 							}));
+						break;
+						case "reboot" :
+							message.channel.send("Enviando señal de reinicio a process manager...");
+							process.send("reiniciar");
+							process.exit(0);
 						break;
 						case "digest" :
 							var hashes = crypto.getHashes();
@@ -1712,7 +1722,7 @@ async function alRecibirMensaje (message) {
 						break;
 						case "shutdown" :
 							var webhookRegistros = await obtenerWebhookRegistros(message.guild);
-							await message.channel.send("Ok pendejo ya me apago");
+							await message.channel.send("Apagando...");
 							if(webhookRegistros != undefined) {
 								await webhookRegistros.send(new Discord.MessageEmbed({
 									title: "Se está apagando el bot.",
