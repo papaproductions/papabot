@@ -1531,7 +1531,7 @@ async function alRecibirMensaje (message) {
 							for(var canal of message.guild.channels.cache.array()) {
 								await abrirCanal(canal.id, message);
 							}
-							embed.setTitle(`<:papabot_correcto:816027708050899005> Se abrió el ${message.guild.name}.`);
+							embed.setTitle(`<:papabot_correcto:816027708050899005> Se abrió ${message.guild.name}.`);
 							embed.setColor("#43b581");
 							message.reply(embed);
 						break;
