@@ -6,7 +6,7 @@ No por ahora, aunque quizás en el futuro.
 
 # Como lo hosteo?
 Para hostearlo, primero:
-1. Descarga e instala Node.js desde https://nodejs.org.
+1. Descarga e instala Node.js desde tu gestor de paquetes o desde https://node.js.org.
 2. Clona este repositorio ejecutando `git clone https://github.com/papaproductions/papabot`
 3. Instala las dependencias necesarias ejecutando `npm install`
 4. Crea dos directorios: `config` y `warnings`
