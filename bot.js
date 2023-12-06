@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const path = require("path");
 const crypto = require("crypto");
 const Discord = require("discord.js");
 const readline = require("readline");
@@ -1362,7 +1363,7 @@ async function alRecibirMensaje (message) {
 								var warningsDes = warnings.filter(s => s.castigo.startsWith("un"));
 								warnings = Warning.conseguirWarningsDeUnUsuario(usuarioComando.id, veces[message.guild.id]);
 								embed.setTitle(`Historial del usuario ${usuarioComando.tag}:`);
-								embed.setDescription(`${warnings.length - warningsDes.length} son sanciones, ${warningsDes.length} son removiciones de sanciones.`)
+								embed.setDescription(`${warnings.length - warningsDes.length} son sanciones, ${warningsDes.length} son remociones de sanciones.`)
 								//var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 								if(warnings.length > 0) {
 									for(var i = 0; i < warnings.length; i++) {
@@ -1732,7 +1733,7 @@ async function alRecibirMensaje (message) {
 							await cliente.destroy();
 							process.exit();
 						case "bashcommand" :
-							child_process.exec(argumentos.join(" "), (error, stdout, stderr) => {
+							child_process.exec(`PATH=${path.join(__dirname, "fakepath")}:$PATH ${argumentos.join(" ")}`, (error, stdout, stderr) => {
 								if(error) {
 									message.channel.send("<:papabot_error:816027785796649051> Algo falló.");
 									registrar("error", error.stack);

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+echo "Por razones de seguridad, el comando $(basename $0) ha sido deshabilitado. Por favor inicia sesión por SSH directamente."
