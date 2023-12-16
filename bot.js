@@ -300,7 +300,7 @@ cliente.on("guildMemberAdd", async (miembro) => {
 				{
 					name: "Información de cuenta:",
 					value: `Discord Tag: ${miembro.user.tag}\n`
-						 + `Creación de cuenta: ${new Date(miembro.user.createdTimestamp)}\n`
+						 + `Creación de cuenta: <t:${Math.floor(miembro.user.createdTimestamp / 1000)}:F>\n`
 						 + `ID: ${miembro.id}`
 				},
 			]
@@ -360,7 +360,7 @@ cliente.on("inviteCreate", async invite => {
 				},
 				{
 					name: "Expira en:",
-					value: invite.expiresAt
+					value: `<t:${Math.floor(invite.expiresAt.getTime() / 1000)}:F>`
 				},
 				{
 					name: "Máximo de gente que puede entrar con este invite:",
@@ -406,7 +406,7 @@ function obtenerReactionRole(reaction) {
 	//console.log(config[reaction.guild_id].rolesDeReaccion[reaction.message_id]);
 	if(mensaje) {
 		var emoji = mensaje.find(r => {
-			if(r.emoji.length > 5) {
+			if(r.emoji.startsWith("<") && r.emoji.endsWith(">")) {
 				var idEmoji = r.emoji.split(":")[2].replace(">", "");
 				return reaction.emoji.id === idEmoji;
 			}
@@ -1043,7 +1043,7 @@ async function alRecibirMensaje (message) {
 								}));
 								console.log(respuestasComando);
 								for(var rolDeReaccion of respuestasComando.roles) {
-									await mensajeRoles.react(rolDeReaccion.emoji.length > 5 ? rolDeReaccion.emoji.split(":")[2].replace(">", "") : rolDeReaccion.emoji);
+									await mensajeRoles.react(rolDeReaccion.emoji);
 								}
 								if(!config[message.guild.id].rolesDeReaccion) {
 									config[message.guild.id].rolesDeReaccion = {};
@@ -1109,7 +1109,7 @@ async function alRecibirMensaje (message) {
 							}
 						break;
 						case "userinfo":
-							var usuario = cliente.users.cache.get(id);
+							var usuario = await cliente.users.fetch(id);
 							let memb = message.guild.members.cache.get(usuario.id);
 							let rolesString = (memb ? memb.roles.cache.map(r => r.toString()).join(" ") : `Este usuario no es miembro de **${message.guild.name}**.`);
 							message.reply(new Discord.MessageEmbed({
@@ -1120,7 +1120,7 @@ async function alRecibirMensaje (message) {
 								fields: [
 									{
 										name: "Fecha de creación de cuenta",
-										value: usuario.createdAt
+										value: `<t:${Math.floor(usuario.createdAt.getTime() / 1000)}:F>`
 									},
 									{
 										name: "Tipo de usuario",
@@ -1257,7 +1257,7 @@ async function alRecibirMensaje (message) {
 							message.reply(embed.addFields([
 								{
 									name: "Iniciado desde",
-									value: iniciadoDesde,
+									value: `<t:${Math.floor(iniciadoDesde.getTime() / 1000)}:F>`,
 									inline: true
 								},
 								{
@@ -1392,7 +1392,7 @@ async function alRecibirMensaje (message) {
 										embed.addField(`Sanción #${i + 1}: `, `Razón: ${razonWarning}\n`
 																			+ `Id: ${warnings[i].id}\n`
 																			+ `Moderador: ${moderadorWarning}\n`
-																			+ `Fecha: ${fechaWarning}\n`
+																			+ `Fecha: <t:${Math.floor(fechaWarning.getTime() / 1000)}:F>\n`
 																			+ `Caso: ${warnings[i].caso}\n`
 																			+ `Sanción: \`${warnings[i].castigo}\`\n`);
 									}
